@@ -10,8 +10,8 @@ public class DesktopLauncher {
         new LwjglApplicationConfiguration();
 
     config.resizable = false;
-    config.width = 500;
-    config.height = 400;
+    config.width = DrawingTexturesExample.SCREEN_WIDTH;
+    config.height = DrawingTexturesExample.SCREEN_HEIGHT;
     config.title = "Rysowanie tekstur - https://kursjava.com";
 
     new LwjglApplication(new DrawingTexturesExample(), config);

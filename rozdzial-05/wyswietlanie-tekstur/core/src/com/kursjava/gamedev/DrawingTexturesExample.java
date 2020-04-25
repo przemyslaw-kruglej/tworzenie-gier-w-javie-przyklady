@@ -25,7 +25,30 @@ public class DrawingTexturesExample extends ApplicationAdapter {
     Gdx.gl.glClearColor(0.741f, 0.874f, 0.976f, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     batch.begin();
-    batch.draw(catImg, 200, 100);
+
+    // obraz w lewym, dolnym rogu
+    batch.draw(catImg, 0, 0);
+
+    // obraz w prawym, gornym rogu
+    batch.draw(
+        catImg,
+        SCREEN_WIDTH - catImg.getWidth(),
+        SCREEN_HEIGHT - catImg.getHeight()
+    );
+
+    // obraz w lewym, gornym rogu
+    batch.draw(catImg, 0, SCREEN_HEIGHT - catImg.getHeight());
+
+    // obraz w prawym, dolnym rogu
+    batch.draw(catImg, SCREEN_WIDTH - catImg.getWidth(), 0);
+
+    // obraz w srodku okna
+    batch.draw(
+        catImg,
+        SCREEN_WIDTH / 2 - catImg.getWidth() / 2,
+        SCREEN_HEIGHT / 2 - catImg.getHeight() / 2
+    );
+
     batch.end();
   }
 
