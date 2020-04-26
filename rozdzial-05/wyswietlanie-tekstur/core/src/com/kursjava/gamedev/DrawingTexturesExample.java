@@ -11,13 +11,12 @@ public class DrawingTexturesExample extends ApplicationAdapter {
   public static final int SCREEN_HEIGHT = 400;
 
   private SpriteBatch batch;
-  private Texture catImg, winkingCatImg;
+  private Texture catImg;
 
   @Override
   public void create () {
     batch = new SpriteBatch();
     catImg = new Texture("cat.png");
-    winkingCatImg = new Texture("winking_cat.png");
   }
 
   @Override
@@ -56,6 +55,5 @@ public class DrawingTexturesExample extends ApplicationAdapter {
   public void dispose () {
     batch.dispose();
     catImg.dispose();
-    winkingCatImg.dispose();
   }
 }
