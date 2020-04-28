@@ -1,1 +1,1 @@
-./gradlew desktop:run60
+./gradlew desktop:run30
