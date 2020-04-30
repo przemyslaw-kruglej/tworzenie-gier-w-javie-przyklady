@@ -22,16 +22,18 @@ public class HandlingKeyboardExample extends ApplicationAdapter {
 
   @Override
   public void render () {
+    float deltaTime = Gdx.graphics.getDeltaTime();
+
     if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-      x += CAT_SPEED * Gdx.graphics.getDeltaTime();
+      x += CAT_SPEED * deltaTime;
     } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-      x -= CAT_SPEED * Gdx.graphics.getDeltaTime();
+      x -= CAT_SPEED * deltaTime;
     }
 
     if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-      y += CAT_SPEED * Gdx.graphics.getDeltaTime();
+      y += CAT_SPEED * deltaTime;
     } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-      y -= CAT_SPEED * Gdx.graphics.getDeltaTime();
+      y -= CAT_SPEED * deltaTime;
     }
 
     Gdx.gl.glClearColor(1, 1, 1, 1);
