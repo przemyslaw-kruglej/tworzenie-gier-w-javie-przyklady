@@ -11,8 +11,9 @@ public class HandlingMouseExample extends ApplicationAdapter {
   private SpriteBatch batch;
   private Texture cat;
 
+  private static final int SCREEN_HEIGHT = 300;
   private int catX, catY;
-  private boolean movingCat;
+  private boolean isCatMoving;
   private float lastMouseX, lastMouseY;
 
   @Override
@@ -23,23 +24,35 @@ public class HandlingMouseExample extends ApplicationAdapter {
 
   @Override
   public void render () {
-    if (movingCat) {
-      catX += Gdx.input.getX() - lastMouseX;
-      catY += (300 - Gdx.input.getY()) - lastMouseY;
-      lastMouseX = Gdx.input.getX();
-      lastMouseY = 300 - Gdx.input.getY();
+    int currentMouseX = Gdx.input.getX();
+    // zmapuj wspolrzedna Y na wspolrzedne obiektow swiata gry
+    int currentMappedMouseY = SCREEN_HEIGHT - 1 - Gdx.input.getY();
+
+    if (isCatMoving) {
+      // przesun wspolrzedne tekstury o roznice
+      // w aktualnej i poprzedniem pozycji kursora myszki
+      catX += currentMouseX - lastMouseX;
+      catY += currentMappedMouseY - lastMouseY;
+
+      // zapamietaj aktualne polozenie kursora, aby
+      // w kolejnym wykonaniu metody render() sprawdzic,
+      // o ile zmienila sie pozycja kursora
+      lastMouseX = currentMouseX;
+      lastMouseY = currentMappedMouseY;
     }
 
     if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-      lastMouseX = Gdx.input.getX();
-      lastMouseY = 300 - Gdx.input.getY();
-
-      if (lastMouseX >= catX && lastMouseX <= catX + cat.getWidth()
-      && lastMouseY >= catY && lastMouseY <= catY + cat.getHeight()) {
-        movingCat = true;
+      // sprawdz, czy kliknieto w obszar tekstury
+      if (currentMouseX >= catX &&
+          currentMouseX < catX + cat.getWidth() &&
+          currentMappedMouseY >= catY &&
+          currentMappedMouseY < catY + cat.getHeight()) {
+        lastMouseX = currentMouseX;
+        lastMouseY = currentMappedMouseY;
+        isCatMoving = true;
       }
     } else if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-      movingCat = false;
+      isCatMoving = false;
     }
 
     Gdx.gl.glClearColor(1, 1, 1, 1);
