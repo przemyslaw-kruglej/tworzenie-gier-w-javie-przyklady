@@ -44,7 +44,9 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     batch.begin();
-    batch.draw(puzzleImg, puzzleOriginX, puzzleOriginY);
+
+    puzzlePiecesLeft.forEach(piece -> piece.draw(batch));
+
     batch.end();
   }
 
@@ -73,7 +75,8 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
             PUZZLE_PIECE_HEIGHT
         );
 
-        GridPoint2 positionOnScreen = new GridPoint2(0, 0);
+        GridPoint2 positionOnScreen =
+            randomizePuzzlePiecePosition();
 
         PuzzlePiece piece = new PuzzlePiece(
             puzzlePieceImg,
@@ -83,5 +86,16 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
         puzzlePiecesLeft.add(piece);
       }
     }
+  }
+
+  private GridPoint2 randomizePuzzlePiecePosition() {
+    return new GridPoint2(
+        randomIntMax(WINDOW_WIDTH - PUZZLE_PIECE_WIDTH),
+        randomIntMax(WINDOW_HEIGHT - PUZZLE_PIECE_HEIGHT)
+    );
+  }
+
+  private int randomIntMax(int maxValue) {
+    return (int) (Math.random() * (maxValue + 1));
   }
 }
