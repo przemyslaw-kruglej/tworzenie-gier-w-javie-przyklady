@@ -19,6 +19,7 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
   private static final int PUZZLE_PIECE_HEIGHT = 100;
 
   private Texture puzzleImg;
+  private Texture puzzleOutlineImg;
   private SpriteBatch batch;
   private int puzzleOriginX;
   private int puzzleOriginY;
@@ -31,6 +32,7 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
     puzzleOriginX = WINDOW_WIDTH / 2 - puzzleImg.getWidth() / 2;
     puzzleOriginY = WINDOW_HEIGHT / 2 - puzzleImg.getHeight() / 2;
 
+    puzzleOutlineImg = new Texture("puzzle_outline.png");
     batch = new SpriteBatch();
 
     puzzlePiecesLeft = new LinkedList<>();
@@ -45,6 +47,8 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
 
     batch.begin();
 
+    batch.draw(puzzleOutlineImg, puzzleOriginX, puzzleOriginY);
+
     puzzlePiecesLeft.forEach(piece -> piece.draw(batch));
 
     batch.end();
@@ -54,6 +58,7 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
   public void dispose () {
     batch.dispose();
     puzzleImg.dispose();
+    puzzleOutlineImg.dispose();
   }
 
   private void preparePuzzlePieces() {
