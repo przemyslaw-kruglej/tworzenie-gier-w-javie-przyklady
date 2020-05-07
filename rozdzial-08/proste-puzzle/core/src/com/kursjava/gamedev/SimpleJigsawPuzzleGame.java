@@ -2,6 +2,7 @@ package com.kursjava.gamedev;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.math.GridPoint2;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
   public static final int WINDOW_WIDTH = 800;
@@ -25,6 +27,8 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
   private int puzzleOriginY;
 
   private List<PuzzlePiece> puzzlePiecesLeft;
+  private PuzzlePiece selectedPiece;
+  private GridPoint2 lastMousePosition = new GridPoint2();
 
   @Override
   public void create () {
@@ -42,6 +46,8 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
 
   @Override
   public void render () {
+    handleMouse();
+
     Gdx.gl.glClearColor(1, 1, 1, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -50,6 +56,9 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
     batch.draw(puzzleOutlineImg, puzzleOriginX, puzzleOriginY);
 
     puzzlePiecesLeft.forEach(piece -> piece.draw(batch));
+    if (selectedPiece != null) {
+      selectedPiece.draw(batch);
+    }
 
     batch.end();
   }
@@ -59,6 +68,43 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
     batch.dispose();
     puzzleImg.dispose();
     puzzleOutlineImg.dispose();
+  }
+
+  private void handleMouse() {
+    GridPoint2 mousePosition = getMousePosMappedToScreenPos();
+
+    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+      ListIterator<PuzzlePiece> listIterator =
+          puzzlePiecesLeft.listIterator(puzzlePiecesLeft.size());
+
+      while (listIterator.hasPrevious()) {
+        PuzzlePiece puzzlePiece = listIterator.previous();
+
+        if (puzzlePiece.isMouseIn(mousePosition)) {
+          selectedPiece = puzzlePiece;
+          listIterator.remove();
+          break;
+        }
+      }
+
+      lastMousePosition.set(mousePosition);
+    }
+
+    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) &&
+        selectedPiece != null) {
+
+      if (isMouseInsideGameWindow()) {
+        selectedPiece.moveBy(
+            mousePosition.x - lastMousePosition.x,
+            mousePosition.y - lastMousePosition.y
+        );
+        lastMousePosition.set(mousePosition);
+      }
+    } else if (selectedPiece != null) {
+      puzzlePiecesLeft.add(selectedPiece);
+
+      selectedPiece = null;
+    }
   }
 
   private void preparePuzzlePieces() {
@@ -102,5 +148,21 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
 
   private int randomIntMax(int maxValue) {
     return (int) (Math.random() * (maxValue + 1));
+  }
+
+  private GridPoint2 getMousePosMappedToScreenPos() {
+    return new GridPoint2(
+        Gdx.input.getX(),
+        WINDOW_HEIGHT - 1 - Gdx.input.getY()
+    );
+  }
+
+  private boolean isMouseInsideGameWindow() {
+    GridPoint2 mousePosition = getMousePosMappedToScreenPos();
+    return
+        mousePosition.x >= 0 &&
+        mousePosition.y >= 0 &&
+        mousePosition.x < WINDOW_WIDTH &&
+        mousePosition.y < WINDOW_HEIGHT;
   }
 }

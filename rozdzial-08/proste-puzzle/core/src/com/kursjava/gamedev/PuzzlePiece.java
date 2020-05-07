@@ -19,4 +19,17 @@ class PuzzlePiece {
   void draw(SpriteBatch batch) {
     batch.draw(pieceImg, positionOnScreen.x, positionOnScreen.y);
   }
+
+  boolean isMouseIn(GridPoint2 mousePos) {
+    return
+        mousePos.x >= positionOnScreen.x &&
+        mousePos.y >= positionOnScreen.y &&
+        mousePos.x < positionOnScreen.x + pieceImg.getRegionWidth() &&
+        mousePos.y < positionOnScreen.y + pieceImg.getRegionHeight();
+  }
+
+  void moveBy(int x, int y) {
+    positionOnScreen.x += x;
+    positionOnScreen.y += y;
+  }
 }
