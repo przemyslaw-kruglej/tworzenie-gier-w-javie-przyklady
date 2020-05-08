@@ -76,7 +76,9 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
   private void handleMouse() {
     GridPoint2 mousePosition = getMousePosMappedToScreenPos();
 
-    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) ||
+        (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) &&
+            !Gdx.input.isButtonPressed(Input.Buttons.LEFT))) {
       ListIterator<PuzzlePiece> listIterator =
           puzzlePiecesLeft.listIterator(puzzlePiecesLeft.size());
 
@@ -84,8 +86,12 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
         PuzzlePiece puzzlePiece = listIterator.previous();
 
         if (puzzlePiece.isMouseIn(mousePosition)) {
-          selectedPiece = puzzlePiece;
-          listIterator.remove();
+          if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            selectedPiece = puzzlePiece;
+            listIterator.remove();
+          } else {
+            puzzlePiece.rotate();
+          }
           break;
         }
       }
@@ -147,7 +153,8 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
         PuzzlePiece piece = new PuzzlePiece(
             puzzlePieceImg,
             positionOnScreen,
-            positionInPuzzle
+            positionInPuzzle,
+            randomIntMax(3) * 90
         );
 
         puzzlePiecesLeft.add(piece);
