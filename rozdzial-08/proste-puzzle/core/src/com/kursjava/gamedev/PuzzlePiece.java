@@ -7,13 +7,16 @@ import com.badlogic.gdx.math.GridPoint2;
 class PuzzlePiece {
   private TextureRegion pieceImg;
   private GridPoint2 positionOnScreen;
+  private GridPoint2 positionInPuzzle;
 
   PuzzlePiece(
       TextureRegion pieceImg,
-      GridPoint2 positionOnScreen) {
+      GridPoint2 positionOnScreen,
+      GridPoint2 positionInPuzzle) {
 
     this.pieceImg = pieceImg;
     this.positionOnScreen = new GridPoint2(positionOnScreen);
+    this.positionInPuzzle = new GridPoint2(positionInPuzzle);
   }
 
   void draw(SpriteBatch batch) {
@@ -31,5 +34,17 @@ class PuzzlePiece {
   void moveBy(int x, int y) {
     positionOnScreen.x += x;
     positionOnScreen.y += y;
+  }
+
+  boolean isPositionRight(GridPoint2 dropPosition) {
+    return
+        dropPosition.x >= positionInPuzzle.x &&
+            dropPosition.y >= positionInPuzzle.y &&
+            dropPosition.x < positionInPuzzle.x + pieceImg.getRegionWidth() &&
+            dropPosition.y < positionInPuzzle.y + pieceImg.getRegionHeight();
+  }
+
+  void snapToGrid() {
+    positionOnScreen.set(positionInPuzzle);
   }
 }

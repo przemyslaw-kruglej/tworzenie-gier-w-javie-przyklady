@@ -27,6 +27,7 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
   private int puzzleOriginY;
 
   private List<PuzzlePiece> puzzlePiecesLeft;
+  private List<PuzzlePiece> puzzlePiecesInPlace;
   private PuzzlePiece selectedPiece;
   private GridPoint2 lastMousePosition = new GridPoint2();
 
@@ -40,6 +41,7 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
     batch = new SpriteBatch();
 
     puzzlePiecesLeft = new LinkedList<>();
+    puzzlePiecesInPlace = new LinkedList<>();
 
     preparePuzzlePieces();
   }
@@ -55,6 +57,7 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
 
     batch.draw(puzzleOutlineImg, puzzleOriginX, puzzleOriginY);
 
+    puzzlePiecesInPlace.forEach(piece -> piece.draw(batch));
     puzzlePiecesLeft.forEach(piece -> piece.draw(batch));
     if (selectedPiece != null) {
       selectedPiece.draw(batch);
@@ -101,7 +104,12 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
         lastMousePosition.set(mousePosition);
       }
     } else if (selectedPiece != null) {
-      puzzlePiecesLeft.add(selectedPiece);
+      if (selectedPiece.isPositionRight(mousePosition)) {
+        selectedPiece.snapToGrid();
+        puzzlePiecesInPlace.add(selectedPiece);
+      } else {
+        puzzlePiecesLeft.add(selectedPiece);
+      }
 
       selectedPiece = null;
     }
@@ -129,9 +137,17 @@ public class SimpleJigsawPuzzleGame extends ApplicationAdapter {
         GridPoint2 positionOnScreen =
             randomizePuzzlePiecePosition();
 
+        GridPoint2 positionInPuzzle =
+            new GridPoint2(
+                puzzleOriginX + col * PUZZLE_PIECE_WIDTH,
+                puzzleOriginY +
+                    (numberOfPuzzleRows - 1 - row) * PUZZLE_PIECE_HEIGHT
+            );
+
         PuzzlePiece piece = new PuzzlePiece(
             puzzlePieceImg,
-            positionOnScreen
+            positionOnScreen,
+            positionInPuzzle
         );
 
         puzzlePiecesLeft.add(piece);
