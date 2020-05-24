@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class MyActor extends Actor {
-  private TextureRegion textureRegion;
+  private final TextureRegion textureRegion;
 
   public MyActor(Texture texture, float x, float y) {
     this.textureRegion = new TextureRegion(texture);
