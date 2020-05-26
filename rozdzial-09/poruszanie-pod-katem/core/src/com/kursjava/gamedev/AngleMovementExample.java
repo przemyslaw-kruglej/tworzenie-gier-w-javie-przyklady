@@ -10,7 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 public class AngleMovementExample extends ApplicationAdapter {
   private SpriteBatch batch;
   private Texture img;
+
   private int imgX = 225, imgY = 175;
+
   private Vector2 goLeftVector, goRightVector;
   private Vector2 goUpVector, goDownVector;
   private Vector2 go30DegreesAngleVector;
