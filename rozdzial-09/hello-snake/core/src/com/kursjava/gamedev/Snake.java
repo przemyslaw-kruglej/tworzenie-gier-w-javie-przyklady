@@ -1,5 +1,7 @@
 package com.kursjava.gamedev;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.GridPoint2;
@@ -29,36 +31,63 @@ public class Snake {
   }
 
   public void act(float deltaTime) {
+    handleDirectionChange();
+
     timeElapsedSinceLastMove += deltaTime;
 
     if (timeElapsedSinceLastMove >= 0.1) {
       timeElapsedSinceLastMove = 0;
-
-      for (int i = snakeSegments.size() - 1; i > 0; i--) {
-        snakeSegments.get(i).set(snakeSegments.get(i - 1));
-      }
-
-      GridPoint2 head = snakeSegments.get(0);
-      switch (direction) {
-        case LEFT:
-          head.x -= texture.getWidth();
-          break;
-        case UP:
-          head.y += texture.getHeight();
-          break;
-        case RIGHT:
-          head.x += texture.getWidth();
-          break;
-        case DOWN:
-          head.y -= texture.getHeight();
-          break;
-      }
+      move();
     }
   }
 
   public void draw(Batch batch) {
     for (GridPoint2 pos : snakeSegments) {
       batch.draw(texture, pos.x, pos.y);
+    }
+  }
+
+  private void handleDirectionChange() {
+    if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) &&
+        direction != MovementDirection.RIGHT) {
+      direction = MovementDirection.LEFT;
+    }
+
+    if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) &&
+        direction != MovementDirection.LEFT) {
+      direction = MovementDirection.RIGHT;
+    }
+
+    if (Gdx.input.isKeyJustPressed(Input.Keys.UP) &&
+        direction != MovementDirection.DOWN) {
+      direction = MovementDirection.UP;
+    }
+
+    if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) &&
+        direction != MovementDirection.UP) {
+      direction = MovementDirection.DOWN;
+    }
+  }
+
+  private void move() {
+    for (int i = snakeSegments.size() - 1; i > 0; i--) {
+      snakeSegments.get(i).set(snakeSegments.get(i - 1));
+    }
+
+    GridPoint2 head = snakeSegments.get(0);
+    switch (direction) {
+      case LEFT:
+        head.x -= texture.getWidth();
+        break;
+      case UP:
+        head.y += texture.getHeight();
+        break;
+      case RIGHT:
+        head.x += texture.getWidth();
+        break;
+      case DOWN:
+        head.y -= texture.getHeight();
+        break;
     }
   }
 }
