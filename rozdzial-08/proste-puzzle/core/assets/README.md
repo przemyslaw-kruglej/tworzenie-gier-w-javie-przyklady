@@ -1,0 +1,1 @@
+Ten plik ma na celu zapisanie w historii Gita katalogu assets, który jest wymagany, aby uruchomić projekt.
