@@ -9,16 +9,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class HelloSnake extends ApplicationAdapter {
   private SpriteBatch batch;
   private Texture snakeImg;
+  private Texture cherryImg;
 
   private Snake snake;
+  private Cherry cherry;
 
   @Override
   public void create () {
     batch = new SpriteBatch();
 
     snakeImg = new Texture("snake.png");
+    cherryImg = new Texture("cherry.png");
 
     snake = new Snake(snakeImg);
+    cherry = new Cherry(cherryImg);
   }
 
   @Override
@@ -30,6 +34,7 @@ public class HelloSnake extends ApplicationAdapter {
 
     batch.begin();
 
+    cherry.draw(batch);
     snake.draw(batch);
 
     batch.end();
@@ -39,5 +44,6 @@ public class HelloSnake extends ApplicationAdapter {
   public void dispose () {
     batch.dispose();
     snakeImg.dispose();
+    cherryImg.dispose();
   }
 }
