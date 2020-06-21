@@ -13,6 +13,7 @@ public class HelloSnake extends ApplicationAdapter {
 
   private Snake snake;
   private Cherry cherry;
+  private boolean gameOver;
 
   @Override
   public void create () {
@@ -27,12 +28,7 @@ public class HelloSnake extends ApplicationAdapter {
 
   @Override
   public void render () {
-    snake.act(Gdx.graphics.getDeltaTime());
-
-    if (snake.isCherryFound(cherry.getPosition())) {
-      snake.extendSnake();
-      cherry.randomizePosition();
-    }
+    updateGame();
 
     Gdx.gl.glClearColor(1, 1, 1, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -50,5 +46,20 @@ public class HelloSnake extends ApplicationAdapter {
     batch.dispose();
     snakeImg.dispose();
     cherryImg.dispose();
+  }
+
+  private void updateGame() {
+    if (!gameOver) {
+      snake.act(Gdx.graphics.getDeltaTime());
+
+      if (snake.isCherryFound(cherry.getPosition())) {
+        snake.extendSnake();
+        cherry.randomizePosition();
+      }
+
+      if (snake.hasHitHimself()) {
+        gameOver = true;
+      }
+    }
   }
 }

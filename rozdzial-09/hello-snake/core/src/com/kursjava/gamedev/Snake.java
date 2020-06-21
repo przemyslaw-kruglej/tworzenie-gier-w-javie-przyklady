@@ -16,6 +16,7 @@ public class Snake {
   private final List<GridPoint2> snakeSegments;
   private MovementDirection direction;
   private float timeElapsedSinceLastMove;
+  private boolean canChangeDirection;
 
   public Snake(Texture texture) {
     this.texture = texture;
@@ -31,12 +32,15 @@ public class Snake {
   }
 
   public void act(float deltaTime) {
-    handleDirectionChange();
+    if (canChangeDirection) {
+      handleDirectionChange();
+    }
 
     timeElapsedSinceLastMove += deltaTime;
 
     if (timeElapsedSinceLastMove >= 0.1) {
       timeElapsedSinceLastMove = 0;
+      canChangeDirection = true;
       move();
     }
   }
@@ -51,6 +55,15 @@ public class Snake {
     );
   }
 
+  public boolean hasHitHimself() {
+    for (int i = 1; i < snakeSegments.size(); i++) {
+      if (snakeSegments.get(i).equals(head())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public void draw(Batch batch) {
     for (GridPoint2 pos : snakeSegments) {
       batch.draw(texture, pos.x, pos.y);
@@ -58,24 +71,31 @@ public class Snake {
   }
 
   private void handleDirectionChange() {
+    MovementDirection newDirection = direction;
+
     if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) &&
         direction != MovementDirection.RIGHT) {
-      direction = MovementDirection.LEFT;
+      newDirection = MovementDirection.LEFT;
     }
 
     if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) &&
         direction != MovementDirection.LEFT) {
-      direction = MovementDirection.RIGHT;
+      newDirection = MovementDirection.RIGHT;
     }
 
     if (Gdx.input.isKeyJustPressed(Input.Keys.UP) &&
         direction != MovementDirection.DOWN) {
-      direction = MovementDirection.UP;
+      newDirection = MovementDirection.UP;
     }
 
     if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) &&
         direction != MovementDirection.UP) {
-      direction = MovementDirection.DOWN;
+      newDirection = MovementDirection.DOWN;
+    }
+
+    if (direction != newDirection) {
+      direction = newDirection;
+      canChangeDirection = false;
     }
   }
 
