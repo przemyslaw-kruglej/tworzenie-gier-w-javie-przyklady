@@ -29,6 +29,11 @@ public class HelloSnake extends ApplicationAdapter {
   public void render () {
     snake.act(Gdx.graphics.getDeltaTime());
 
+    if (snake.isCherryFound(cherry.getPosition())) {
+      snake.extendSnake();
+      cherry.randomizePosition();
+    }
+
     Gdx.gl.glClearColor(1, 1, 1, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

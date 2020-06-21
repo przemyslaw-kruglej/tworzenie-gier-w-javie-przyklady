@@ -41,6 +41,16 @@ public class Snake {
     }
   }
 
+  public boolean isCherryFound(GridPoint2 cherryPosition) {
+    return head().equals(cherryPosition);
+  }
+
+  public void extendSnake() {
+    snakeSegments.add(
+        new GridPoint2(snakeSegments.get(snakeSegments.size() - 1))
+    );
+  }
+
   public void draw(Batch batch) {
     for (GridPoint2 pos : snakeSegments) {
       batch.draw(texture, pos.x, pos.y);
@@ -83,7 +93,7 @@ public class Snake {
     int lastWindowSegmentX = Gdx.graphics.getWidth() - segmentWidth;
     int lastWindowSegmentY = Gdx.graphics.getHeight() - segmentHeight;
 
-    GridPoint2 head = snakeSegments.get(0);
+    GridPoint2 head = head();
 
     switch (direction) {
       case LEFT:
@@ -99,5 +109,9 @@ public class Snake {
         head.y = (head.y == 0) ? lastWindowSegmentY : head.y - segmentHeight;
         break;
     }
+  }
+
+  private GridPoint2 head() {
+    return snakeSegments.get(0);
   }
 }
