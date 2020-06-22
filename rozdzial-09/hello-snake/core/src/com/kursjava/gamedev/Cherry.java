@@ -12,8 +12,6 @@ public class Cherry {
   public Cherry(Texture texture) {
     this.texture = texture;
     this.position = new GridPoint2();
-
-    randomizePosition();
   }
 
   public void draw(Batch batch) {

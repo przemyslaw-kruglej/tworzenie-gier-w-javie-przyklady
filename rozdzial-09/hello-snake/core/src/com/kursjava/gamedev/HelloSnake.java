@@ -2,6 +2,7 @@ package com.kursjava.gamedev;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,6 +25,8 @@ public class HelloSnake extends ApplicationAdapter {
 
     snake = new Snake(snakeImg);
     cherry = new Cherry(cherryImg);
+
+    initializeNewGame();
   }
 
   @Override
@@ -48,6 +51,12 @@ public class HelloSnake extends ApplicationAdapter {
     cherryImg.dispose();
   }
 
+  private void initializeNewGame() {
+    snake.initialize();
+    cherry.randomizePosition();
+    gameOver = false;
+  }
+
   private void updateGame() {
     if (!gameOver) {
       snake.act(Gdx.graphics.getDeltaTime());
@@ -59,6 +68,10 @@ public class HelloSnake extends ApplicationAdapter {
 
       if (snake.hasHitHimself()) {
         gameOver = true;
+      }
+    } else {
+      if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
+        initializeNewGame();
       }
     }
   }

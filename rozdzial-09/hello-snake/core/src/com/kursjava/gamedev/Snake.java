@@ -20,10 +20,14 @@ public class Snake {
 
   public Snake(Texture texture) {
     this.texture = texture;
-
-    direction = MovementDirection.RIGHT;
     snakeSegments = new ArrayList<>();
+  }
 
+  public void initialize() {
+    timeElapsedSinceLastMove = 0;
+    direction = MovementDirection.RIGHT;
+
+    snakeSegments.clear();
     snakeSegments.add(new GridPoint2(90, 30));
     snakeSegments.add(new GridPoint2(75, 30));
     snakeSegments.add(new GridPoint2(60, 30));
