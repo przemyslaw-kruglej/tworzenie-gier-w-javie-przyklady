@@ -67,6 +67,10 @@ public class Snake {
     snakeSegments.add(new GridPoint2(30, 30));
   }
 
+  public List<GridPoint2> getSnakeSegmentPositions() {
+    return snakeSegments;
+  }
+
   public void act(float deltaTime) {
     if (canChangeDirection) {
       handleDirectionChange();
@@ -224,7 +228,7 @@ public class Snake {
 
     }
     // "zwykłe" przypadki wyznaczania kierunku ogona węża
-    // polegają na sprawdzenia, z której strony ogona,
+    // polegają na sprawdzeniu, z której strony ogona,
     // czyli ostatniego segmentu węża, jest przedostatni segment
     else if (segmentBeforeTail.x > tail.x) {
       tailDirection = MovementDirection.RIGHT;

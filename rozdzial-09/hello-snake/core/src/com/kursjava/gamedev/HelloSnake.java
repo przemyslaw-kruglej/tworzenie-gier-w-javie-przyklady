@@ -6,6 +6,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.GridPoint2;
+
+import java.util.List;
 
 public class HelloSnake extends ApplicationAdapter {
   private SpriteBatch batch;
@@ -14,6 +17,7 @@ public class HelloSnake extends ApplicationAdapter {
 
   private Snake snake;
   private Cherry cherry;
+  private PositionRandomizer positionRandomizer;
   private boolean gameOver;
 
   @Override
@@ -25,6 +29,7 @@ public class HelloSnake extends ApplicationAdapter {
 
     snake = new Snake(snakeImg);
     cherry = new Cherry(cherryImg);
+    positionRandomizer = new PositionRandomizer();
 
     initializeNewGame();
   }
@@ -53,8 +58,27 @@ public class HelloSnake extends ApplicationAdapter {
 
   private void initializeNewGame() {
     snake.initialize();
-    cherry.randomizePosition();
+    randomizeCherryPosition();
     gameOver = false;
+  }
+
+  private void randomizeCherryPosition() {
+    List<GridPoint2> occupiedPositions =
+        snake.getSnakeSegmentPositions();
+
+    try {
+      cherry.setPosition(
+          positionRandomizer.getRandomAvailablePosition(
+              occupiedPositions
+          )
+      );
+    // w rzadkim przypadku, w którym gracz będzie grał
+    // tak długo, że uda mu się zająć wężem cały ekran,
+    // nie będzie już miejsca dla jedzenia - będzie to
+    // równoważne z końcem gry
+    } catch (NoMorePositionsAvailable e) {
+      gameOver = true;
+    }
   }
 
   private void updateGame() {
@@ -63,7 +87,7 @@ public class HelloSnake extends ApplicationAdapter {
 
       if (snake.isCherryFound(cherry.getPosition())) {
         snake.extendSnake();
-        cherry.randomizePosition();
+        randomizeCherryPosition();
       }
 
       if (snake.hasHitHimself()) {
